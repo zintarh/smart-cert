@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         user: {
           select: {
             name: true,
-            unijos: true
+            university: true
           }
         }
       }
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         studentName: certificate.recipientName,
         course: certificate.course,
         graduationYear: certificate.issueDate.getFullYear().toString(),
-        unijos: certificate.user.unijos || 'Unknown Unijos',
+        unijos: certificate.user.university || 'Unknown University',
         issuedAt: certificate.issueDate.toISOString(),
         issuer: certificate.user.name || 'Unknown Issuer',
         blockchainHash: certificate.hash,

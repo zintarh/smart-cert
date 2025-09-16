@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
           name: user.name,
           image: user.image,
           role: user.role,
-          unijos: user.unijos,
+          university: user.university,
         }
       }
     })

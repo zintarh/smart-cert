@@ -74,12 +74,16 @@ export function UploadCertificateModal({ open, onOpenChange, onSuccess }: Upload
       const response = await api.createCertificate(apiData)
       
       if (response.success && response.data) {
+        const responseData = response.data as {
+          certificateId: string;
+          hash: string;
+        }
         onSuccess(
-          response.data.certificateId, 
+          responseData.certificateId, 
           data.recipientName, 
           data.email, 
           data.template,
-          response.data.hash,
+          responseData.hash,
           data.signatoryLeft,
           data.signatoryRight
         )
