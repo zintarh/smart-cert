@@ -16,18 +16,34 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
+          console.log("=== AUTH DEBUG START ===")
+          console.log("Environment:", process.env.NODE_ENV)
+          console.log("Database URL exists:", !!process.env.DATABASE_URL)
+          console.log("NextAuth Secret exists:", !!process.env.NEXTAUTH_SECRET)
+          
           if (!credentials?.email || !credentials?.password) {
-            console.log("Missing credentials")
+            console.log("Missing credentials:", { email: !!credentials?.email, password: !!credentials?.password })
             return null
           }
 
           console.log("Attempting to authenticate:", credentials.email)
+
+          // Test database connection first
+          try {
+            await prisma.$connect()
+            console.log("Database connection successful")
+          } catch (dbError) {
+            console.error("Database connection failed:", dbError)
+            return null
+          }
 
           const user = await prisma.user.findUnique({
             where: {
               email: credentials.email
             }
           })
+
+          console.log("User query result:", { found: !!user, id: user?.id, email: user?.email })
 
           if (!user) {
             console.log("User not found:", credentials.email)
@@ -39,10 +55,15 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
+          console.log("Password hash exists:", !!user.password)
+          console.log("Password length:", user.password.length)
+
           const isPasswordValid = await bcrypt.compare(
             credentials.password,
             user.password
           )
+
+          console.log("Password validation result:", isPasswordValid)
 
           if (!isPasswordValid) {
             console.log("Invalid password for:", credentials.email)
@@ -50,6 +71,8 @@ export const authOptions: NextAuthOptions = {
           }
 
           console.log("Authentication successful for:", credentials.email)
+          console.log("=== AUTH DEBUG END ===")
+          
           return {
             id: user.id,
             email: user.email,
@@ -59,7 +82,11 @@ export const authOptions: NextAuthOptions = {
             university: user.university,
           }
         } catch (error) {
-          console.error("Authentication error:", error)
+          console.error("=== AUTH ERROR ===")
+          console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error)
+          console.error("Error message:", error instanceof Error ? error.message : String(error))
+          console.error("Error stack:", error instanceof Error ? error.stack : 'No stack trace')
+          console.error("=== AUTH ERROR END ===")
           return null
         }
       }
