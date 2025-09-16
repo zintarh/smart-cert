@@ -88,7 +88,7 @@ export function Header({ title, user }: HeaderProps) {
                     <FileText className="w-4 h-4" />
                     <span>Issue Certificate</span>
                   </button>
-                  <button 
+                  {/* <button 
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                     onClick={() => {
                       openUploadCertificateModal()
@@ -97,7 +97,7 @@ export function Header({ title, user }: HeaderProps) {
                   >
                     <Upload className="w-4 h-4" />
                     <span>Upload Certificate</span>
-                  </button>
+                  </button> */}
                 </div>
               )}
             </div>
