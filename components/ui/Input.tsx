@@ -20,10 +20,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             type={type}
             className={cn(
-              "w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg",
+              "w-full px-4 py-3 bg-white border border-gray-300 rounded-lg",
               "focus:ring-2 focus:ring-smart-blue-500 focus:border-transparent",
               "outline-none transition-colors",
-              "placeholder:text-gray-400",
+              "text-gray-900 placeholder:text-gray-500",
               error && "border-red-500 focus:ring-red-500",
               rightElement && "pr-12",
               className

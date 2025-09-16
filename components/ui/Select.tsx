@@ -26,7 +26,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <div className="relative">
           <select
             className={cn(
-              "w-full appearance-none bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 pr-8 text-sm text-gray-900 focus:ring-2 focus:ring-smart-blue-500 focus:border-transparent outline-none transition-colors",
+              "w-full appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 pr-8 text-sm text-gray-900 focus:ring-2 focus:ring-smart-blue-500 focus:border-transparent outline-none transition-colors",
               error && "border-red-500 focus:ring-red-500",
               className
             )}

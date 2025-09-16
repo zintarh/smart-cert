@@ -105,6 +105,19 @@ export default function SettingsPage() {
     loadUserProfile()
   }, [session, status, reset])
 
+  // Update form when session data changes
+  useEffect(() => {
+    if (session?.user) {
+      reset({
+        adminName: session.user.name || '',
+        email: session.user.email || '',
+        phoneNumber: '',
+        universityName: session.user.university || '',
+        publicVerificationKey: '',
+      })
+    }
+  }, [session, reset])
+
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0]
