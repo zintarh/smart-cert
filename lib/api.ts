@@ -111,7 +111,7 @@ class ApiClient {
     name: string;
     email: string;
     phoneNumber: string;
-    unijos: string;
+    university: string;
     publicVerificationKey: string;
     image?: string;
   }): Promise<ApiResponse> {

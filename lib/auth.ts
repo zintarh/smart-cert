@@ -54,9 +54,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const userWithRole = user as { role?: string; unijos?: string };
+        const userWithRole = user as { role?: string; university?: string };
         token.role = userWithRole.role || 'admin'
-        token.unijos = userWithRole.unijos || ''
+        token.university = userWithRole.university || ''
       }
       return token
     },
@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
       if (token && session.user) {
         session.user.id = token.sub!
         session.user.role = token.role as string
-        session.user.unijos = token.unijos as string
+        session.user.university = token.university as string
       }
       return session
     }

@@ -37,12 +37,12 @@ export default function SettingsPage() {
   } = useForm<SettingsFormData>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      adminName: 'Winifred Okoro',
-      email: 'registrar@unijos.edu.ng',
-      phoneNumber: '081 3565 6446',
-      universityName: 'University of Jos',
-      publicVerificationKey: 'FFX1BXFCCB',
-      password: '123456',
+      adminName: session?.user?.name || '',
+      email: session?.user?.email || '',
+      phoneNumber: '',
+      universityName: session?.user?.university || '',
+      publicVerificationKey: '',
+      password: '',
     },
   })
 
@@ -61,26 +61,40 @@ export default function SettingsPage() {
               name?: string;
               email?: string;
               phoneNumber?: string;
-              unijos?: string;
+              university?: string;
               publicVerificationKey?: string;
               image?: string;
             };
             reset({
-              adminName: data.name || 'Winifred Okoro',
-              email: data.email || 'registrar@unijos.edu.ng',
-              phoneNumber: data.phoneNumber || '081 3565 6446',
-              universityName: data.unijos || 'University of Jos',
-              publicVerificationKey: data.publicVerificationKey || 'FFX1BXFCCB',
+              adminName: data.name || session.user.name || '',
+              email: data.email || session.user.email || '',
+              phoneNumber: data.phoneNumber || '',
+              universityName: data.university || session.user.university || '',
+              publicVerificationKey: data.publicVerificationKey || '',
             })
             if (data.image) {
               setAvatarPreview(data.image)
             }
           } else {
-            toast.error(response.message || 'Failed to load user profile.')
+            // Fallback to session data if API fails
+            reset({
+              adminName: session.user.name || '',
+              email: session.user.email || '',
+              phoneNumber: '',
+              universityName: session.user.university || '',
+              publicVerificationKey: '',
+            })
           }
         } catch (error) {
           console.error('Error loading user profile:', error)
-          toast.error('An error occurred while loading profile.')
+          // Fallback to session data if API fails
+          reset({
+            adminName: session.user.name || '',
+            email: session.user.email || '',
+            phoneNumber: '',
+            universityName: session.user.university || '',
+            publicVerificationKey: '',
+          })
         } finally {
           setIsProfileLoading(false)
         }
@@ -108,7 +122,7 @@ export default function SettingsPage() {
         name: data.adminName,
         email: data.email,
         phoneNumber: data.phoneNumber,
-        unijos: data.universityName,
+        university: data.universityName,
         publicVerificationKey: data.publicVerificationKey,
       })
 
