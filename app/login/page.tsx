@@ -15,8 +15,9 @@ import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { isLoading } = useAuth();
+  const { setLoading } = useAuth();
 
   const {
     register,
@@ -27,17 +28,27 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const result = await signIn('credentials', {
-      redirect: false,
-      email: data.email,
-      password: data.password,
-    });
+    setIsSubmitting(true);
+    setLoading(true);
+    
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
 
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success('Login successful!');
-      router.push('/dashboard');
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success('Login successful!');
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      toast.error('An error occurred during login. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
@@ -102,6 +113,7 @@ export default function LoginPage() {
               {...register('email')}
               type="email"
               label="Enter official unijos email"
+              placeholder="admin@unijos.edu"
               error={errors.email?.message}
               className="text-gray-900 placeholder:text-gray-400"
             />
@@ -121,6 +133,7 @@ export default function LoginPage() {
               <Input
                 {...register('password')}
                 type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
                 error={errors.password?.message}
                 className="text-gray-900 placeholder:text-gray-400"
                 rightElement={
@@ -147,7 +160,7 @@ export default function LoginPage() {
             {/* Submit Button */}
             <Button
               type="submit"
-              isLoading={isLoading}
+              isLoading={isSubmitting}
               loadingText="Signing in..."
               className="w-full"
               size="lg"
