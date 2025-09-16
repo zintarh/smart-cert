@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
 import { loginSchema, type LoginFormData } from '@/lib/validations';
 
@@ -46,7 +47,7 @@ export default function LoginPage() {
       <div className="absolute top-6 left-6 text-gray-600 text-sm font-medium z-20">Login</div>
       
       {/* Left Section - Promotional (40% width) */}
-      <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-2/5 relative overflow-hidden" style={{ backgroundColor: '#08001F' }}>
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10 flex flex-col justify-center px-16 py-20 text-white">
           <h1 className="text-5xl font-bold mb-10 leading-tight">
@@ -87,8 +88,7 @@ export default function LoginPage() {
           {/* Logo */}
           <div className="flex items-center space-x-3 mb-10">
             <div className="relative w-10 h-10">
-              <div className="absolute w-6 h-6 bg-blue-500 transform rotate-45 top-1 left-1"></div>
-              <div className="absolute w-6 h-6 bg-yellow-400 transform rotate-45 top-2 left-2"></div>
+              <Image src="/logo.svg" alt="SmartCert" width={40} height={40} />
             </div>
             <span className="text-2xl font-bold text-black">SmartCert</span>
           </div>

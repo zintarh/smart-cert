@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 import { CertificateStatsChart } from '@/components/dashboard/CertificateStatsChart';
 import { CertificateApprovalChart } from '@/components/dashboard/CertificateApprovalChart';
@@ -10,7 +10,6 @@ import {
   CheckCircle, 
   TrendingUp
 } from 'lucide-react';
-import { api } from '@/lib/api';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { SuccessModal, UploadCertificateModal } from '@/components/ui';
 
@@ -26,50 +25,34 @@ export default function DashboardPage() {
   } | null>(null);
 
 
-  const [dashboardData, setDashboardData] = useState<{
+  // Static dashboard data with zeros for now
+  const dashboardData = {
     stats: {
-      totalCertificates: number;
-      verifiedCertificates: number;
-      pendingCertificates: number;
-      todayIssued: number;
-      growthRate?: number;
-      growthChange?: number;
-      activeUsers?: number;
-      usersChange?: number;
-    };
-    chartData?: Array<{
-      date: string;
-      issued: number;
-      verified: number;
-      pending: number;
-      revoked: number;
-      total: number;
-    }>;
-    approvalData?: Array<{
-      name: string;
-      value: number;
-      color: string;
-    }>;
-  } | null>(null);
+      totalCertificates: 0,
+      verifiedCertificates: 0,
+      pendingCertificates: 0,
+      todayIssued: 0,
+      growthRate: 0,
+      growthChange: 0,
+      activeUsers: 0,
+      usersChange: 0,
+    },
+    chartData: [
+      { date: '2024-01-01', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+      { date: '2024-01-02', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+      { date: '2024-01-03', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+      { date: '2024-01-04', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+      { date: '2024-01-05', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+      { date: '2024-01-06', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+      { date: '2024-01-07', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+    ],
+    approvalData: [
+      { name: 'Approved', value: 0, color: '#10B981' },
+      { name: 'Pending', value: 0, color: '#F59E0B' },
+      { name: 'Rejected', value: 0, color: '#EF4444' },
+    ],
+  };
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadDashboardData = async () => {
-      try {
-        const response = await api.getDashboardStats();
-        if (response.success && response.data) {
-          setDashboardData(response.data as typeof dashboardData);
-        }
-      } catch (error) {
-        console.error('Error loading dashboard data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadDashboardData();
-  }, []);
 
 
   // };
@@ -99,43 +82,38 @@ export default function DashboardPage() {
     >
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {isLoading ? (
-            Array.from({ length: 4 }).map((_, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                <div className="h-8 bg-gray-200 rounded w-1/3 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/4"></div>
-              </div>
-            ))
-          ) : dashboardData && dashboardData.stats && (
-            <>
-              <StatsCard
-                title="Total Certificates"
-                value={dashboardData.stats.totalCertificates.toString()}
-                icon={FileText}
-                iconColor="bg-smart-blue"
-                change="+12%"
-                changeType="positive"
-              />
-              <StatsCard
-                title="Verified"
-                value={dashboardData.stats.verifiedCertificates.toString()}
-                icon={CheckCircle}
-                iconColor="bg-green-500"
-                change="+8%"
-                changeType="positive"
-              />
-             
-              <StatsCard
-                title="Issued Today"
-                value={dashboardData.stats.todayIssued.toString()}
-                icon={TrendingUp}
-                iconColor="bg-purple-500"
-                change="+15%"
-                changeType="positive"
-              />
-            </>
-          ) }
+          <StatsCard
+            title="Total Certificates"
+            value={dashboardData.stats.totalCertificates.toString()}
+            icon={FileText}
+            iconColor="bg-smart-blue"
+            change="+0%"
+            changeType="neutral"
+          />
+          <StatsCard
+            title="Verified"
+            value={dashboardData.stats.verifiedCertificates.toString()}
+            icon={CheckCircle}
+            iconColor="bg-green-500"
+            change="+0%"
+            changeType="neutral"
+          />
+          <StatsCard
+            title="Pending"
+            value={dashboardData.stats.pendingCertificates.toString()}
+            icon={FileText}
+            iconColor="bg-yellow-500"
+            change="+0%"
+            changeType="neutral"
+          />
+          <StatsCard
+            title="Issued Today"
+            value={dashboardData.stats.todayIssued.toString()}
+            icon={TrendingUp}
+            iconColor="bg-purple-500"
+            change="+0%"
+            changeType="neutral"
+          />
         </div>
 
         {/* Charts Row */}
