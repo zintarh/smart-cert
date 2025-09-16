@@ -5,8 +5,10 @@ import { prisma } from "./prisma"
 
 export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === "development",
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
+      id: "credentials",
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -64,7 +66,11 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -96,5 +102,13 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
-  }
+  },
+  events: {
+    async signIn({ user, account, profile, isNewUser }) {
+      console.log("Sign in event:", { user: user.email, account: account?.type })
+    },
+    async signOut({ session, token }) {
+      console.log("Sign out event:", { session: session?.user?.email })
+    },
+  },
 }
