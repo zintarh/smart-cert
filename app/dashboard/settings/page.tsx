@@ -186,15 +186,15 @@ export default function SettingsPage() {
 
   return (
     <DashboardLayout title="Settings">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto min-h-screen">
         {/* Page Title */}
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Settings</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 ">Settings</h1>
 
         {/* Single Form with Light Blue Border */}
         <div className="bg-white rounded-lg border-2 border-blue-200 p-8">
-          <form onSubmit={handleSubmit(onProfileSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onProfileSubmit)} className="space-y-2">
             {/* Profile Picture Section */}
-            <div className="flex items-start space-x-6">
+            {/* <div className="flex items-start space-x-6">
               <div className="relative">
                 <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200 bg-gray-100">
                   <Image
@@ -234,7 +234,7 @@ export default function SettingsPage() {
                   Delete avatar
                 </Button>
               </div>
-            </div>
+            </div> */}
 
             {/* Personal Information Section */}
             <div className="border-t border-gray-200 pt-8">
@@ -310,7 +310,7 @@ export default function SettingsPage() {
             </div>
 
             {/* Security Section */}
-            <div className="border-t border-gray-200 pt-8">
+            {/* <div className="border-t border-gray-200 pt-8">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Security</h2>
                 <p className="text-gray-600 text-sm">Update your security information here.</p>
@@ -333,7 +333,7 @@ export default function SettingsPage() {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Save Changes Button */}
             <div className="flex justify-end pt-6">

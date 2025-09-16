@@ -39,9 +39,9 @@ export function StatsCard({
             <p
               className={cn(
                 "text-sm mt-1",
-                changeType === "positive" && "text-green-600",
-                changeType === "negative" && "text-red-600",
-                changeType === "neutral" && "text-gray-500"
+                changeType === "positive" && "#FBE7E7",
+                changeType === "negative" && "#FBE7E7",
+                changeType === "neutral" && "#FBE7E7"
               )}
             >
               {change}

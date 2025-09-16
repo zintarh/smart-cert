@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { signOut } from 'next-auth/react'
 import { Eye, Plus, User, ChevronDown, FileText, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useModal } from '@/contexts/ModalContext'
 
 interface HeaderProps {
   title: string
@@ -12,15 +13,14 @@ interface HeaderProps {
     email?: string | null
     image?: string | null
   }
-  onIssueCertificate?: () => void
-  onUploadCertificate?: () => void
 }
 
-export function Header({ title, user, onIssueCertificate, onUploadCertificate }: HeaderProps) {
+export function Header({ title, user }: HeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isCertificateDropdownOpen, setIsCertificateDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const certificateDropdownRef = useRef<HTMLDivElement>(null)
+  const { openIssueCertificateModal, openUploadCertificateModal, openVerificationModal } = useModal()
 
   const handleLogout = async () => {
     try {
@@ -55,7 +55,11 @@ export function Header({ title, user, onIssueCertificate, onUploadCertificate }:
         {/* Right side */}
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-3">
-            <Button size="sm" className="flex items-center space-x-2">
+            <Button 
+              size="sm" 
+              className="flex items-center space-x-2"
+              onClick={openVerificationModal}
+            >
               <Eye className="w-4 h-4" />
               <span>Verify Certificate</span>
             </Button>
@@ -77,7 +81,7 @@ export function Header({ title, user, onIssueCertificate, onUploadCertificate }:
                   <button 
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                     onClick={() => {
-                      onIssueCertificate?.()
+                      openIssueCertificateModal()
                       setIsCertificateDropdownOpen(false)
                     }}
                   >
@@ -87,7 +91,7 @@ export function Header({ title, user, onIssueCertificate, onUploadCertificate }:
                   <button 
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                     onClick={() => {
-                      onUploadCertificate?.()
+                      openUploadCertificateModal()
                       setIsCertificateDropdownOpen(false)
                     }}
                   >

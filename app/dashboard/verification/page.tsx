@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { FileText, Lock } from 'lucide-react';
 import { VerificationErrorModal, VerificationSuccessModal, VerificationWarningModal } from '@/components/ui';
+import { CertificatePreviewModal } from '@/components/ui/CertificatePreviewModal';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 
 const verificationSchema = z.object({
@@ -19,11 +20,13 @@ export default function VerificationPage() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [verificationResult, setVerificationResult] = useState<{
     isValid: boolean;
     message: string;
     certificateData?: {
       id?: string;
+      certificateId?: string;
       recipientName?: string;
       studentName?: string;
       course?: string;
@@ -33,6 +36,10 @@ export default function VerificationPage() {
       issuer?: string;
       blockchainHash?: string;
       digitalSignature?: string;
+      email?: string;
+      matricNo?: string;
+      template?: string;
+      hash?: string;
     };
   } | null>(null);
 
@@ -85,6 +92,36 @@ export default function VerificationPage() {
     }
     
     setIsVerifying(false);
+  };
+
+  const handleViewCertificate = () => {
+    if (verificationResult?.certificateData) {
+      setIsSuccessModalOpen(false);
+      setIsPreviewModalOpen(true);
+    }
+  };
+
+  const handleDownload = () => {
+    console.log('Download certificate:', verificationResult?.certificateData);
+  };
+
+  // Transform verification data to preview modal format
+  const getPreviewData = () => {
+    if (!verificationResult?.certificateData) return null;
+    
+    const data = verificationResult.certificateData;
+    return {
+      certificateId: data.certificateId || 'N/A',
+      recipientName: data.recipientName || data.studentName || 'N/A',
+      email: data.email || 'N/A',
+      course: data.course || 'N/A',
+      matricNo: data.matricNo || 'N/A',
+      yearOfGraduation: data.graduationYear || 'N/A',
+      template: data.template || 'harvard', // Default to harvard if not specified
+      hash: data.hash || data.blockchainHash,
+      signatoryLeft: 'Dr. Sarah Johnson', // Default signatories
+      signatoryRight: 'Prof. Michael Chen'
+    };
   };
 
 
@@ -161,6 +198,7 @@ export default function VerificationPage() {
         open={isSuccessModalOpen}
         onOpenChange={setIsSuccessModalOpen}
         certificateData={verificationResult?.certificateData}
+        onViewCertificate={handleViewCertificate}
       />
 
       {/* Verification Warning Modal */}
@@ -176,6 +214,16 @@ export default function VerificationPage() {
         onOpenChange={setIsErrorModalOpen}
         message={verificationResult?.message || 'Certificate not found or invalid.'}
       />
+
+      {/* Certificate Preview Modal */}
+      {getPreviewData() && (
+        <CertificatePreviewModal
+          open={isPreviewModalOpen}
+          onOpenChange={setIsPreviewModalOpen}
+          certificateData={getPreviewData()!}
+          onDownload={handleDownload}
+        />
+      )}
     </DashboardLayout>
   );
 }

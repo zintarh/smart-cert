@@ -28,7 +28,10 @@ interface IssueCertificateModalProps {
     template: unknown,
     hash?: string,
     signatoryLeft?: string,
-    signatoryRight?: string
+    signatoryRight?: string,
+    course?: string,
+    matricNo?: string,
+    yearOfGraduation?: string
   ) => void;
 }
 
@@ -93,7 +96,10 @@ export function IssueCertificateModal({
             selectedTemplate,
             result.data.hash,
             "",
-            ""
+            "",
+            formData.course,
+            formData.matricNo,
+            formData.yearOfGraduation
           );
           reset();
           handleClose();

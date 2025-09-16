@@ -16,13 +16,20 @@ interface VerificationSuccessModalProps {
     unijos?: string;
     issuedAt?: string;
     issuer?: string;
+    template?: string;
+    certificateId?: string;
+    email?: string;
+    matricNo?: string;
+    hash?: string;
   }
+  onViewCertificate?: () => void
 }
 
 export function VerificationSuccessModal({ 
   open, 
   onOpenChange, 
-  certificateData 
+  certificateData,
+  onViewCertificate 
 }: VerificationSuccessModalProps) {
   return (
     <Modal open={open} onOpenChange={onOpenChange} className="max-w-xl">
@@ -79,13 +86,24 @@ export function VerificationSuccessModal({
           </div>
         )}
 
-        {/* Action Button */}
-        <Button
-          onClick={() => onOpenChange(false)}
-          className="w-full"
-        >
-          Close
-        </Button>
+        {/* Action Buttons */}
+        <div className="flex space-x-3">
+          {onViewCertificate && (
+            <Button
+              onClick={onViewCertificate}
+              className="flex-1 bg-[#0F96E3] text-white hover:bg-[#0C7BBF]"
+            >
+              View Certificate
+            </Button>
+          )}
+          <Button
+            onClick={() => onOpenChange(false)}
+            className={onViewCertificate ? "flex-1" : "w-full"}
+            variant={onViewCertificate ? "outline" : undefined}
+          >
+            Close
+          </Button>
+        </div>
       </div>
     </Modal>
   )

@@ -8,15 +8,11 @@ import { Header } from './Header'
 interface DashboardLayoutProps {
   children: React.ReactNode
   title: string
-  onIssueCertificate?: () => void
-  onUploadCertificate?: () => void
 }
 
 export function DashboardLayout({ 
   children, 
-  title, 
-  onIssueCertificate, 
-  onUploadCertificate 
+  title
 }: DashboardLayoutProps) {
   const { data: session, status } = useSession()
 
@@ -45,8 +41,6 @@ export function DashboardLayout({
         <Header 
           title={title}
           user={session?.user || { name: '', email: '', image: '' }}
-          onIssueCertificate={onIssueCertificate}
-          onUploadCertificate={onUploadCertificate}
         />
         <main className="flex-1 p-20">
           {children}

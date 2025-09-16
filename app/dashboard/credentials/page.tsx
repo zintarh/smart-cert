@@ -9,6 +9,7 @@ import { IssueCertificateModal } from '@/components/dashboard/IssueCertificateMo
 import { SuccessModal } from '@/components/ui/SuccessModal'
 import { UploadCertificateModal } from '@/components/ui/UploadCertificateModal'
 import { CertificateDetailsModal } from '@/components/ui/CertificateDetailsModal'
+import { CertificatePreviewModal } from '@/components/ui/CertificatePreviewModal'
 import { api } from '@/lib/api'
 
 // Certificate interface matching the API response
@@ -40,7 +41,15 @@ export default function CredentialsPage() {
     certificateId: string
     recipientName: string
     email: string
+    course: string
+    matricNo: string
+    yearOfGraduation: string
+    template: string
+    hash?: string
+    signatoryLeft?: string
+    signatoryRight?: string
   } | null>(null)
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false)
   const [certificates, setCertificates] = useState<Certificate[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [totalPages, setTotalPages] = useState(1)
@@ -83,15 +92,29 @@ export default function CredentialsPage() {
   }, [currentPage, filters])
 
 
-  const handleSuccess = (certificateId: string, recipientName: string, email: string, template: unknown, hash?: string, signatoryLeft?: string, signatoryRight?: string) => {
-    setSuccessData({ certificateId, recipientName, email })
+  const handleSuccess = (certificateId: string, recipientName: string, email: string, template: unknown, hash?: string, signatoryLeft?: string, signatoryRight?: string, course?: string, matricNo?: string, yearOfGraduation?: string) => {
+    setSuccessData({ 
+      certificateId, 
+      recipientName, 
+      email, 
+      course: course || 'Computer Science',
+      matricNo: matricNo || email.split('@')[0],
+      yearOfGraduation: yearOfGraduation || '2024',
+      template: template as string,
+      hash,
+      signatoryLeft,
+      signatoryRight
+    })
     setIsSuccessModalOpen(true)
     console.log('Selected template:', template)
     console.log('Signatories:', { signatoryLeft, signatoryRight })
   }
 
   const handlePreview = () => {
-    console.log('Preview certificate:', successData?.certificateId)
+    if (successData) {
+      setIsSuccessModalOpen(false)
+      setIsPreviewModalOpen(true)
+    }
   }
 
   const handleDownload = () => {
@@ -101,11 +124,7 @@ export default function CredentialsPage() {
 
 
   return (
-    <DashboardLayout
-      title="Add Recipient"
-      onIssueCertificate={() => setIsModalOpen(true)}
-      onUploadCertificate={() => setIsUploadModalOpen(true)}
-    >
+    <DashboardLayout title="Add Recipient">
       <div className="space-y-6">
         {/* Filter and Action Bar */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
@@ -181,7 +200,24 @@ export default function CredentialsPage() {
             certificateId={successData.certificateId}
             recipientName={successData.recipientName}
             email={successData.email}
+            course={successData.course}
+            matricNo={successData.matricNo}
+            yearOfGraduation={successData.yearOfGraduation}
+            template={successData.template}
+            hash={successData.hash}
+            signatoryLeft={successData.signatoryLeft}
+            signatoryRight={successData.signatoryRight}
             onPreview={handlePreview}
+            onDownload={handleDownload}
+          />
+        )}
+
+        {/* Certificate Preview Modal */}
+        {successData && (
+          <CertificatePreviewModal
+            open={isPreviewModalOpen}
+            onOpenChange={setIsPreviewModalOpen}
+            certificateData={successData}
             onDownload={handleDownload}
           />
         )}

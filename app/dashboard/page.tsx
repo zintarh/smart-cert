@@ -1,29 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { StatsCard } from '@/components/dashboard/StatsCard';
-import { CertificateStatsChart } from '@/components/dashboard/CertificateStatsChart';
-import { CertificateApprovalChart } from '@/components/dashboard/CertificateApprovalChart';
-import { IssueCertificateModal } from '@/components/dashboard/IssueCertificateModal';
-import { 
-  FileText, 
-  CheckCircle, 
-  TrendingUp
-} from 'lucide-react';
-import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { SuccessModal, UploadCertificateModal } from '@/components/ui';
+import { StatsCard } from "@/components/dashboard/StatsCard";
+import { CertificateStatsChart } from "@/components/dashboard/CertificateStatsChart";
+import { CertificateApprovalChart } from "@/components/dashboard/CertificateApprovalChart";
+import { FileText, Hourglass, GraduationCap } from "lucide-react";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 
 export default function DashboardPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [successData, setSuccessData] = useState<{
-    certificateId: string;
-    recipientName: string;
-    email: string;
-    hash?: string;
-  } | null>(null);
-
 
   // Static dashboard data with zeros for now
   const dashboardData = {
@@ -38,119 +21,107 @@ export default function DashboardPage() {
       usersChange: 0,
     },
     chartData: [
-      { date: '2024-01-01', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
-      { date: '2024-01-02', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
-      { date: '2024-01-03', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
-      { date: '2024-01-04', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
-      { date: '2024-01-05', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
-      { date: '2024-01-06', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
-      { date: '2024-01-07', issued: 0, verified: 0, pending: 0, revoked: 0, total: 0 },
+      {
+        date: "2024-01-01",
+        issued: 0,
+        verified: 0,
+        pending: 0,
+        revoked: 0,
+        total: 0,
+      },
+      {
+        date: "2024-01-02",
+        issued: 0,
+        verified: 0,
+        pending: 0,
+        revoked: 0,
+        total: 0,
+      },
+      {
+        date: "2024-01-03",
+        issued: 0,
+        verified: 0,
+        pending: 0,
+        revoked: 0,
+        total: 0,
+      },
+      {
+        date: "2024-01-04",
+        issued: 0,
+        verified: 0,
+        pending: 0,
+        revoked: 0,
+        total: 0,
+      },
+      {
+        date: "2024-01-05",
+        issued: 0,
+        verified: 0,
+        pending: 0,
+        revoked: 0,
+        total: 0,
+      },
+      {
+        date: "2024-01-06",
+        issued: 0,
+        verified: 0,
+        pending: 0,
+        revoked: 0,
+        total: 0,
+      },
+      {
+        date: "2024-01-07",
+        issued: 0,
+        verified: 0,
+        pending: 0,
+        revoked: 0,
+        total: 0,
+      },
     ],
     approvalData: [
-      { name: 'Approved', value: 0, color: '#10B981' },
-      { name: 'Pending', value: 0, color: '#F59E0B' },
-      { name: 'Rejected', value: 0, color: '#EF4444' },
+      { name: "Approved", value: 0, color: "#10B981" },
+      { name: "Pending", value: 0, color: "#F59E0B" },
+      { name: "Rejected", value: 0, color: "#EF4444" },
     ],
   };
-
-
-
-  // };
-
-  const handleSuccess = (certificateId: string, recipientName: string, email: string, template: unknown, hash?: string, signatoryLeft?: string, signatoryRight?: string) => {
-    setSuccessData({ certificateId, recipientName, email, hash });
-    setIsSuccessModalOpen(true);
-    console.log('Selected template:', template);
-    console.log('Signatories:', { signatoryLeft, signatoryRight });
-  };
-
-  const handlePreview = () => {
-    console.log('Preview certificate:', successData?.certificateId);
-  };
-
-  const handleDownload = () => {
-    console.log('Download certificate:', successData?.certificateId);
-  };
-
 
 
   return (
-    <DashboardLayout 
-      title="Overview" 
-      onIssueCertificate={() => setIsModalOpen(true)}
-      onUploadCertificate={() => setIsUploadModalOpen(true)}
-    >
+    <DashboardLayout title="Overview">
       <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <StatsCard
-            title="Total Certificates"
+            title="Certificates Issued"
             value={dashboardData.stats.totalCertificates.toString()}
             icon={FileText}
-            iconColor="bg-smart-blue"
+            iconColor="bg-[#0F96E3]"
             change="+0%"
             changeType="neutral"
           />
           <StatsCard
-            title="Verified"
+            title="Students Covered"
             value={dashboardData.stats.verifiedCertificates.toString()}
-            icon={CheckCircle}
-            iconColor="bg-green-500"
+            icon={GraduationCap}
+            iconColor="bg-[#0F96E3]"
             change="+0%"
             changeType="neutral"
           />
+
           <StatsCard
-            title="Pending"
-            value={dashboardData.stats.pendingCertificates.toString()}
-            icon={FileText}
-            iconColor="bg-yellow-500"
-            change="+0%"
-            changeType="neutral"
-          />
-          <StatsCard
-            title="Issued Today"
+            title="Pending Verification"
             value={dashboardData.stats.todayIssued.toString()}
-            icon={TrendingUp}
-            iconColor="bg-purple-500"
+            icon={Hourglass}
+            iconColor="bg-[#0F96E3]"
             change="+0%"
-            changeType="neutral"
+            changeType="negative"
           />
         </div>
 
-        {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <CertificateStatsChart />
           <CertificateApprovalChart />
         </div>
 
-        
-
-            {/* Issue Certificate Modal */}
-            <IssueCertificateModal
-              open={isModalOpen}
-              onOpenChange={setIsModalOpen}
-              onSuccess={handleSuccess}
-            />
-
-            {/* Upload Certificate Modal */}
-            <UploadCertificateModal
-              open={isUploadModalOpen}
-              onOpenChange={setIsUploadModalOpen}
-              onSuccess={handleSuccess}
-            />
-
-            {/* Success Modal */}
-            {successData && (
-              <SuccessModal
-                open={isSuccessModalOpen}
-                onOpenChange={setIsSuccessModalOpen}
-                certificateId={successData.certificateId}
-                recipientName={successData.recipientName}
-                email={successData.email}
-                hash={successData.hash}
-                onPreview={handlePreview}
-                onDownload={handleDownload}
-              />
-            )}
       </div>
     </DashboardLayout>
   );
